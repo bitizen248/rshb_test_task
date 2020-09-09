@@ -1,4 +1,7 @@
+import 'package:divan_test_task_rshb/resources/products_api.dart';
 import 'package:flutter/material.dart';
+
+import 'models/sort_order.dart';
 
 class RshbApp extends StatelessWidget {
   // This widget is the root of your application.
@@ -98,7 +101,10 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
             Text(
               '$_counter',
-              style: Theme.of(context).textTheme.headline4,
+              style: Theme
+                  .of(context)
+                  .textTheme
+                  .headline4,
             ),
           ],
         ),
