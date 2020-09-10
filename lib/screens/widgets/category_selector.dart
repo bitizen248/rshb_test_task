@@ -1,98 +1,63 @@
 import 'package:divan_test_task_rshb/screens/colors.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class CategorySelector extends StatefulWidget {
-  final List<CategoryTab> tabs;
-
-  const CategorySelector({Key key, this.tabs}) : super(key: key);
-
   @override
   _CategorySelectorState createState() => _CategorySelectorState();
 }
 
-class _CategorySelectorState extends State<CategorySelector> with SingleTickerProviderStateMixin {
-  int _activeElement = 0;
-
-  AnimationController _animationController;
-  Animation _animation;
-
-  @override
-  void initState() {
-    super.initState();
-    _animationController = AnimationController(duration: Duration(milliseconds: 500), vsync: this);
-    _animation = IntTween(begin: 0, end: (widget.tabs.length * 100)).animate(_animationController);
-    _animation.addListener(() {
-      setState(() {});
-    });
-  }
+class _CategorySelectorState extends State<CategorySelector> {
+  int selectedCategory = 0;
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 30),
-      child: Container(
-        height: 50,
-        child: Stack(
-          children: [
-            Container(
-              height: 50,
-              width: double.infinity,
-              decoration: ShapeDecoration(
-                color: RshbColors.greyF5,
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
+    return Container(
+      height: 300,
+      child: ListView(
+        scrollDirection: Axis.horizontal,
+        children: [
+          for (var i = 0; i < 20; i++)
+            GestureDetector(
+              onTap: () {
+                setState(() {
+                  selectedCategory = i;
+                });
+              },
+              child: _CategoryItem(
+                active: selectedCategory == i,
+                title: "Text",
               ),
             ),
-            Row(
-              children: [
-                Expanded(
-                  flex: _animation.value,
-                  child: Container(),
-                ),
-                Expanded(
-                  flex: 100,
-                  child: Container(
-                    height: 50,
-                    decoration: ShapeDecoration(
-                      color: RshbColors.primary,
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
-                    ),
-                  ),
-                ),
-                Expanded(
-                  flex: ((widget.tabs.length * 100) - _animation.value - 100),
-                  child: Container(),
-                ),
-              ],
-            ),
-            Row(
-              children: [
-                for (var i = 0; i < widget.tabs.length; i++)
-                  Expanded(
-                    child: GestureDetector(
-                      onTap: () async {
-                        setState(() {
-                          _activeElement = i;
-                        });
-                        _animationController.animateTo((1 / widget.tabs.length) * i);
-                      },
-                      child: Center(
-                          child: AnimatedDefaultTextStyle(
-                              duration: Duration(milliseconds: 500),
-                              style: TextStyle(color: i == _activeElement ? Colors.white : Colors.black),
-                              child: Text(widget.tabs[i].name))),
-                    ),
-                  )
-              ],
-            )
-          ],
-        ),
+        ],
       ),
     );
   }
 }
 
-class CategoryTab {
-  String name;
+class _CategoryItem extends StatelessWidget {
+  final bool active;
+  final String iconUri;
+  final String title;
 
-  CategoryTab(this.name);
+  _CategoryItem({this.iconUri, this.title, this.active});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        AnimatedContainer(
+          height: 50,
+          width: 50,
+          child: iconUri != null ? SvgPicture.asset(iconUri) : null,
+          decoration: BoxDecoration(
+              color: active ? RshbColors.primary : null,
+              borderRadius: BorderRadius.circular(25),
+              border: Border.all(color: Colors.black, width: 1)),
+          duration: Duration(milliseconds: 500),
+        ),
+        Text(title)
+      ],
+    );
+  }
 }
