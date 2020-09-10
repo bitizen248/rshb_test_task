@@ -19,7 +19,7 @@ class _TabSelectorState extends State<TabSelector> with SingleTickerProviderStat
   @override
   void initState() {
     super.initState();
-    _animationController = AnimationController(duration: Duration(milliseconds: 500), vsync: this);
+    _animationController = AnimationController(duration: Duration(milliseconds: 300), vsync: this);
     _animation = IntTween(begin: 0, end: (widget.tabs.length * 100)).animate(_animationController);
     _animation.addListener(() {
       setState(() {});
@@ -42,47 +42,63 @@ class _TabSelectorState extends State<TabSelector> with SingleTickerProviderStat
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
               ),
             ),
-            Row(
-              children: [
-                Expanded(
-                  flex: _animation.value,
-                  child: Container(),
-                ),
-                Expanded(
-                  flex: 100,
-                  child: Container(
-                    height: 50,
-                    decoration: ShapeDecoration(
-                      color: RshbColors.primary,
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
+            Padding(
+              padding: const EdgeInsets.all(5),
+              child: Row(
+                children: [
+                  Expanded(
+                    flex: _animation.value,
+                    child: Container(),
+                  ),
+                  Expanded(
+                    flex: 100,
+                    child: Container(
+                      height: 40,
+                      decoration: BoxDecoration(
+                        color: RshbColors.primary,
+                        borderRadius: BorderRadius.circular(25),
+                        boxShadow: [
+                          BoxShadow(
+                            color: RshbColors.primary.withOpacity(0.4),
+                            blurRadius: 10,
+                            offset: Offset(2, 2)
+                          )
+                        ]
+                      ),
                     ),
                   ),
-                ),
-                Expanded(
-                  flex: ((widget.tabs.length * 100) - _animation.value - 100),
-                  child: Container(),
-                ),
-              ],
-            ),
-            Row(
-              children: [
-                for (var i = 0; i < widget.tabs.length; i++)
                   Expanded(
-                    child: GestureDetector(
-                      onTap: () async {
-                        setState(() {
-                          _activeElement = i;
-                        });
-                        _animationController.animateTo((1 / widget.tabs.length) * i);
-                      },
-                      child: Center(
-                          child: AnimatedDefaultTextStyle(
-                              duration: Duration(milliseconds: 500),
-                              style: TextStyle(color: i == _activeElement ? Colors.white : Colors.black),
-                              child: Text(widget.tabs[i].name))),
-                    ),
-                  )
-              ],
+                    flex: ((widget.tabs.length * 100) - _animation.value - 100),
+                    child: Container(),
+                  ),
+                ],
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(5.0),
+              child: Row(
+                children: [
+                  for (var i = 0; i < widget.tabs.length; i++)
+                    Expanded(
+                      child: GestureDetector(
+                        onTap: () async {
+                          setState(() {
+                            _activeElement = i;
+                          });
+                          _animationController.animateTo((1 / widget.tabs.length) * i);
+                        },
+                        child: Center(
+                            child: AnimatedDefaultTextStyle(
+                                duration: Duration(milliseconds: 300),
+                                style: TextStyle(
+                                    color: i == _activeElement ? Colors.white : Colors.black,
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w600),
+                                child: Text(widget.tabs[i].name))),
+                      ),
+                    )
+                ],
+              ),
             )
           ],
         ),

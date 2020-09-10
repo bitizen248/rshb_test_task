@@ -13,7 +13,7 @@ class _CategorySelectorState extends State<CategorySelector> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 300,
+      height: 76,
       child: ListView(
         scrollDirection: Axis.horizontal,
         children: [
@@ -26,7 +26,7 @@ class _CategorySelectorState extends State<CategorySelector> {
               },
               child: _CategoryItem(
                 active: selectedCategory == i,
-                title: "Text",
+                title: "Овощи и фрукты",
               ),
             ),
         ],
@@ -47,16 +47,23 @@ class _CategoryItem extends StatelessWidget {
     return Column(
       children: [
         AnimatedContainer(
-          height: 50,
-          width: 50,
+          margin: const EdgeInsets.symmetric(horizontal: 21),
+          height: 40,
+          width: 40,
           child: iconUri != null ? SvgPicture.asset(iconUri) : null,
           decoration: BoxDecoration(
               color: active ? RshbColors.primary : null,
               borderRadius: BorderRadius.circular(25),
-              border: Border.all(color: Colors.black, width: 1)),
+              border: active ? null : Border.all(color: RshbColors.greyE0, width: 1)),
           duration: Duration(milliseconds: 500),
         ),
-        Text(title)
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Text(
+            title,
+            style: TextStyle(fontSize: 12, fontWeight: FontWeight.w500, color: RshbColors.grey96),
+          ),
+        )
       ],
     );
   }
