@@ -18,6 +18,7 @@ dependencies:
   shared_preferences: ^0.5.10
   json_annotation: ^3.0.1
   bloc: ^6.0.3
+  flutter_bloc: ^6.0.3
   flutter_svg: ^0.18.1
 
 dev_dependencies:
@@ -34,8 +35,8 @@ flutter:
 
   assets:
     - assets/json/
-    - assets/images/products
-    - assets/icons
+    - assets/images/products/
+    - assets/icons/
 
   # To add custom fonts to your application, add a fonts section here,
   # in this "flutter" section. Each entry in this list should have a
