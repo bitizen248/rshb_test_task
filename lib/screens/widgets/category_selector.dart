@@ -23,9 +23,6 @@ class _CategorySelectorState extends State<CategorySelector> {
           if (state.categories == null)
             return Container(
               height: 76,
-              child: Center(
-                child: CircularProgressIndicator(),
-              ),
             );
           return Container(
             height: 76,

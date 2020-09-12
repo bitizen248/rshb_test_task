@@ -5,6 +5,8 @@ import 'package:divan_test_task_rshb/models/product.dart';
 import 'package:divan_test_task_rshb/models/sort_order.dart';
 import 'package:divan_test_task_rshb/resources/products_api.dart';
 
+
+/// Bloc отвечающий за писок товаров
 class ProductListCubit extends Cubit<ProductListState> {
   ProductsApi productsApi = ProductsApi();
 

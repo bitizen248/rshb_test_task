@@ -68,10 +68,12 @@ class ProductsApi {
         Farmer f = Farmer.fromJson(e);
         farmersMap[f.id] = f;
       });
+      Set<int> likes = await _getFavorites();
       for (var productJson in dataJson["products"]) {
         Product product = Product.fromJson(productJson);
         product.category = categoriesMap[productJson["categoryId"]]; // подствялем нужную категори
         product.farmer = farmersMap[productJson["farmerId"]]; // подставляем нужного производителя
+        product.favorite = likes.contains(product.id);
         products.add(product);
       }
       await _simulateNetworkDelay();
@@ -97,9 +99,29 @@ class ProductsApi {
     return products;
   }
 
+  /// Получения списков избранного из памяти
+  Future<Set<int>> _getFavorites() async {
+    SharedPreferences preferences = await _preferences.future;
+    if (!preferences.containsKey("favorites")) return Set();
+    List<String> ids = preferences.getStringList("favorites");
+    return Set.from(ids.map((e) => int.parse(e)));
+  }
+
   /// Добавление в избранное
-  Future<bool> addToFavorites(Product product) {}
+  Future<bool> addToFavorites(Product product) async {
+    Set<int> likes = await _getFavorites();
+    if (likes.contains(product.id)) return true;
+    likes.add(product.id);
+    SharedPreferences preferences = await _preferences.future;
+    return await preferences.setStringList("favorites", likes.map((e) => e.toString()).toList());
+  }
 
   /// Удаление из избранного
-  Future<bool> removeFromFavorites(Product product) {}
+  Future<bool> removeFromFavorites(Product product) async {
+    Set<int> likes = await _getFavorites();
+    if (!likes.contains(product.id)) return true;
+    likes.remove(product.id);
+    SharedPreferences preferences = await _preferences.future;
+    return await preferences.setStringList("favorites", likes.map((e) => e.toString()).toList());
+  }
 }

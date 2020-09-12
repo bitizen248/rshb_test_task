@@ -39,7 +39,7 @@ class ProductCard extends StatelessWidget {
                 Align(
                   child: Padding(
                     padding: const EdgeInsets.all(11.0),
-                    child: FavoriteBadge(),
+                    child: FavoriteBadge(product: product,),
                   ),
                   alignment: Alignment.topRight,
                 )
