@@ -9,6 +9,7 @@ part of 'product.dart';
 Product _$ProductFromJson(Map<String, dynamic> json) {
   return Product(
     json['id'] as int,
+    json['title'] as String,
     json['unit'] as String,
     (json['totalRating'] as num)?.toDouble(),
     json['ratingCount'] as int,
@@ -27,6 +28,7 @@ Product _$ProductFromJson(Map<String, dynamic> json) {
 
 Map<String, dynamic> _$ProductToJson(Product instance) => <String, dynamic>{
       'id': instance.id,
+      'title': instance.title,
       'unit': instance.unit,
       'totalRating': instance.totalRating,
       'ratingCount': instance.ratingCount,

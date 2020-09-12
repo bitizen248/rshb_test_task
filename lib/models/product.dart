@@ -1,6 +1,6 @@
-import 'package:divan_test_task_rshb/models/farmer.dart';
-import 'package:divan_test_task_rshb/models/characteristic.dart';
 import 'package:divan_test_task_rshb/models/category.dart';
+import 'package:divan_test_task_rshb/models/characteristic.dart';
+import 'package:divan_test_task_rshb/models/farmer.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'product.g.dart';
@@ -8,7 +8,6 @@ part 'product.g.dart';
 /// Объект продукта
 @JsonSerializable()
 class Product {
-
   /// Уникальный идентификатор товара
   int id;
 
@@ -19,6 +18,9 @@ class Product {
   /// Объект Производителя
   @JsonKey(ignore: true)
   Farmer farmer;
+
+  /// Имя товара
+  String title;
 
   /// Объем/масса
   String unit;
@@ -47,11 +49,10 @@ class Product {
   /// Характеристики товара
   List<Characteristic> characteristics;
 
-  Product(this.id, this.unit, this.totalRating, this.ratingCount, this.image, this.shortDescription, this.description,
-      this.price, this.favorite, this.characteristics);
+  Product(this.id, this.title, this.unit, this.totalRating, this.ratingCount, this.image, this.shortDescription,
+      this.description, this.price, this.favorite, this.characteristics);
 
   factory Product.fromJson(Map<String, dynamic> json) => _$ProductFromJson(json);
-
 
   /// Первращает товар Map для последующей json сериализации
   Map<String, dynamic> toJson() => _$ProductToJson(this);
