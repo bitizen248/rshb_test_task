@@ -1,9 +1,21 @@
-import 'package:divan_test_task_rshb/screens/widgets/category_selector.dart';
-import 'package:divan_test_task_rshb/screens/widgets/product_card.dart';
+import 'package:divan_test_task_rshb/screens/tabs/products_tab.dart';
 import 'package:divan_test_task_rshb/screens/widgets/tab_selector.dart';
 import 'package:flutter/material.dart';
 
-class MainScreen extends StatelessWidget {
+class MainScreen extends StatefulWidget {
+  @override
+  _MainScreenState createState() => _MainScreenState();
+}
+
+class _MainScreenState extends State<MainScreen> with SingleTickerProviderStateMixin {
+  TabController _tabController;
+
+  @override
+  void initState() {
+    super.initState();
+    _tabController = TabController(length: 3, vsync: this);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -14,29 +26,14 @@ class MainScreen extends StatelessWidget {
       body: ListView(
         children: [
           TabSelector(
+            onTabSelect: (i) => _tabController.animateTo(i),
             tabs: [
               SectionTab("Продукты"),
               SectionTab("Продукты"),
               SectionTab("Продукты"),
             ],
           ),
-          CategorySelector(),
-          GridView.count(
-            primary: false,
-            shrinkWrap: true,
-            crossAxisCount: 2,
-            padding: EdgeInsets.symmetric(horizontal: 16),
-            mainAxisSpacing: 7,
-            crossAxisSpacing: 7,
-            childAspectRatio: ((MediaQuery.of(context).size.width - 39)/2) / 307,
-            children: [
-              ProductCard(),
-              ProductCard(),
-              ProductCard(),
-              ProductCard(),
-              ProductCard(),
-            ],
-          )
+          ProductsTab(),
         ],
       ),
     );

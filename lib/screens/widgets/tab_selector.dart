@@ -3,8 +3,9 @@ import 'package:flutter/material.dart';
 
 class TabSelector extends StatefulWidget {
   final List<SectionTab> tabs;
+  final Function(int) onTabSelect;
 
-  const TabSelector({Key key, this.tabs}) : super(key: key);
+  const TabSelector({Key key, this.tabs, this.onTabSelect}) : super(key: key);
 
   @override
   _TabSelectorState createState() => _TabSelectorState();
@@ -55,16 +56,11 @@ class _TabSelectorState extends State<TabSelector> with SingleTickerProviderStat
                     child: Container(
                       height: 40,
                       decoration: BoxDecoration(
-                        color: RshbColors.primary,
-                        borderRadius: BorderRadius.circular(25),
-                        boxShadow: [
-                          BoxShadow(
-                            color: RshbColors.primary.withOpacity(0.4),
-                            blurRadius: 10,
-                            offset: Offset(2, 2)
-                          )
-                        ]
-                      ),
+                          color: RshbColors.primary,
+                          borderRadius: BorderRadius.circular(25),
+                          boxShadow: [
+                            BoxShadow(color: RshbColors.primary.withOpacity(0.4), blurRadius: 10, offset: Offset(2, 2))
+                          ]),
                     ),
                   ),
                   Expanded(
@@ -82,6 +78,7 @@ class _TabSelectorState extends State<TabSelector> with SingleTickerProviderStat
                     Expanded(
                       child: GestureDetector(
                         onTap: () async {
+                          widget.onTabSelect(i);
                           setState(() {
                             _activeElement = i;
                           });
