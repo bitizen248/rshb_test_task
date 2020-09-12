@@ -1,86 +1,67 @@
+import 'package:divan_test_task_rshb/bloc/products_list_bloc.dart';
+import 'package:divan_test_task_rshb/bloc/states/product_list_state.dart';
 import 'package:divan_test_task_rshb/models/category.dart';
 import 'package:divan_test_task_rshb/models/sort_order.dart';
 import 'package:divan_test_task_rshb/screens/colors.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class CategorySelector extends StatefulWidget {
-  final List<Category> categories;
-  final Category selectedCategory;
-  final SortOrder sortOrder;
-
-  final Function(Category) onCategorySelect;
-  final Function(SortOrder) onSortSelect;
-
-  const CategorySelector(
-      {Key key,
-      this.selectedCategory,
-      this.sortOrder = SortOrder.ratingDesc,
-      this.onCategorySelect,
-      this.onSortSelect,
-      @required this.categories})
-      : super(key: key);
-
   @override
   _CategorySelectorState createState() => _CategorySelectorState();
+
 }
 
 class _CategorySelectorState extends State<CategorySelector> {
-  Category _selectedCategory;
-  SortOrder _sortOrder;
-
-  @override
-  void initState() {
-    super.initState();
-    _selectedCategory = widget.selectedCategory;
-    _sortOrder = widget.sortOrder;
-  }
-
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 76,
-      child: ListView(
-        scrollDirection: Axis.horizontal,
-        children: [
-          _CategoryItem(
-            iconUri: "assets/icons/sort_icon.svg",
-            title: "Сортировка",
-            active: _sortOrder == SortOrder.priceAsc,
-            onTap: () {
-              setState(() {
-                if (widget.sortOrder == SortOrder.ratingDesc)
-                  _sortOrder = SortOrder.priceAsc;
-                else
-                  _sortOrder = SortOrder.ratingDesc;
-                widget.onSortSelect(_sortOrder);
-              });
-            },
-          ),
-          ...List<Widget>.generate(widget.categories.length, (index) {
-            Category category = widget.categories[index];
-            return _CategoryItem(
-              iconUri: category.iconUri,
-              title: category.title,
-              active: _selectedCategory == category,
-              onTap: () {
-                if (category == _selectedCategory) {
-                  widget.onCategorySelect(null);
-                  setState(() {
-                    _selectedCategory = null;
-                  });
-                } else {
-                  widget.onCategorySelect(category);
-                  setState(() {
-                    _selectedCategory = category;
-                  });
-                }
-              },
+    ProductListCubit productListCubit = BlocProvider.of<ProductListCubit>(context);
+    return BlocBuilder<ProductListCubit, ProductListState>(
+        cubit: productListCubit,
+        builder: (context, state) {
+          if (state.categories == null)
+            return Container(
+              height: 76,
+              child: Center(
+                child: CircularProgressIndicator(),
+              ),
             );
-          })
-        ],
-      ),
-    );
+          return Container(
+            height: 76,
+            child: ListView(
+              scrollDirection: Axis.horizontal,
+              children: [
+                _CategoryItem(
+                  iconUri: "assets/icons/sort_icon.svg",
+                  title: "Сортировка",
+                  active: state.sortOrder == SortOrder.priceAsc,
+                  onTap: () {
+                    if (state.sortOrder == SortOrder.ratingDesc)
+                      productListCubit.selectSort(SortOrder.priceAsc);
+                    else
+                      productListCubit.selectSort(SortOrder.ratingDesc);
+                  },
+                ),
+                ...List<Widget>.generate(state.categories.length, (index) {
+                  Category category = state.categories[index];
+                  return _CategoryItem(
+                    iconUri: category.iconUri,
+                    title: category.title,
+                    active: state.selectedCategory == category,
+                    onTap: () {
+                      if (category == state.selectedCategory) {
+                        productListCubit.selectCategory(null);
+                      } else {
+                        productListCubit.selectCategory(category);
+                      }
+                    },
+                  );
+                })
+              ],
+            ),
+          );
+        });
   }
 }
 

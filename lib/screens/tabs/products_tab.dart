@@ -6,31 +6,26 @@ import 'package:divan_test_task_rshb/screens/widgets/product_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class ProductsTab extends StatelessWidget {
-  final ProductListCubit _productListCubit = ProductListCubit();
+class ProductsTab extends StatefulWidget {
+  @override
+  _ProductsTabState createState() => _ProductsTabState();
+}
+
+class _ProductsTabState extends State<ProductsTab> {
 
   @override
   Widget build(BuildContext context) {
+    ProductListCubit productListCubit = BlocProvider.of<ProductListCubit>(context);
     return BlocBuilder<ProductListCubit, ProductListState>(
-      cubit: _productListCubit,
-      buildWhen: (oldState, newState) => oldState != newState,
+      cubit: productListCubit,
       builder: (context, state) {
         if (state.categories == null)
           return Center(
             child: CircularProgressIndicator(),
           );
         return ListView(
-          primary: false,
-          shrinkWrap: true,
           padding: EdgeInsets.only(bottom: 16),
           children: [
-            CategorySelector(
-              selectedCategory: state.selectedCategory,
-              sortOrder: state.sortOrder,
-              categories: state.categories,
-              onCategorySelect: (category) => _productListCubit.selectCategory(category),
-              onSortSelect: (sort) => _productListCubit.selectSort(sort),
-            ),
             if (state.products == null)
               Center(child: CircularProgressIndicator())
             else
