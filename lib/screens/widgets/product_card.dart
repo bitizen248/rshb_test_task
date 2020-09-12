@@ -21,10 +21,16 @@ class ProductCard extends StatelessWidget {
               Container(
                 height: 121,
               ),
-//              Image.asset(
-//                product.image,
-//                height: 121,
-//              ),
+              ClipRRect(
+                borderRadius: BorderRadius.circular(10),
+                child: Image.asset(
+                  product.image,
+                  height: 121,
+                  width: 307,
+                  alignment: Alignment.center,
+                  fit: BoxFit.contain,
+                ),
+              ),
               FavoriteBadge()
             ],
           ),
@@ -38,31 +44,34 @@ class ProductCard extends StatelessWidget {
                   child: RichText(
                     maxLines: 2,
                     text: TextSpan(
-                        text: "Молоко",
+                        text: product.title,
                         style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: Colors.black),
-                        children: [TextSpan(text: " / 1 л", style: TextStyle(fontSize: 12, color: RshbColors.grey96))]),
+                        children: [
+                          TextSpan(text: " / ${product.unit}", style: TextStyle(fontSize: 12, color: RshbColors.grey96))
+                        ]),
                   ),
                 ),
                 RatingBadge(
-                  rating: 4,
-                  voteCount: 12,
+                  rating: product.totalRating,
+                  voteCount: product.ratingCount,
                 ),
                 Container(
-                  height: 24,
+                    height: 24,
                     margin: EdgeInsets.only(top: 8, bottom: 8),
                     child: Text(
-                      "Описание",
+                      product.shortDescription,
                       maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
                       style: TextStyle(fontSize: 10, color: RshbColors.grey96),
                     )),
                 Container(
                     height: 33,
                     child: Text(
-                      "Фaрмер",
+                      product.farmer.title,
                       style: TextStyle(fontSize: 12),
                     )),
                 Text(
-                  "100 ₽",
+                  "${product.price.toInt()} ₽",
                   style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
                 )
               ],

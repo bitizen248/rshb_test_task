@@ -9,7 +9,6 @@ import 'package:divan_test_task_rshb/models/sort_order.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:shared_preferences/shared_preferences.dart';
 
-
 /// Класс, позволяющий получать данные по товара
 ///
 /// Объект этого класса существует в едином экземпляре
@@ -17,9 +16,11 @@ import 'package:shared_preferences/shared_preferences.dart';
 class ProductsApi {
   static final ProductsApi _singleton = ProductsApi._init();
 
-
   /// Настрйоки, в них храним Изранное
   Completer<SharedPreferences> _preferences = Completer();
+
+  /// Кэш товаров
+  List<Product> allProductsCache;
 
   factory ProductsApi() {
     return _singleton;
@@ -31,7 +32,6 @@ class ProductsApi {
       _preferences.complete(value);
     });
   }
-
 
   /// Метод, который симулирет задержку сети (600-700 милисекунд)
   Future<void> _simulateNetworkDelay() async {
@@ -46,38 +46,41 @@ class ProductsApi {
 
   /// Получение списка категорий
   Future<List<Category>> getCategories() async {
-    List<Map<String, dynamic>> categoriesJson = (await _getDataJson())["categories"];
+    List categoriesJson = (await _getDataJson())["categories"];
     await _simulateNetworkDelay();
     return List.generate(categoriesJson.length, (i) => Category.fromJson(categoriesJson[i]));
   }
 
-
   /// Получение списка товаров
   Future<List<Product>> getProducts({Category category, SortOrder order = SortOrder.ratingDesc}) async {
-    Map<String, dynamic> dataJson = await _getDataJson();
-
-    Map<int, Category> categoriesMap = Map(); // Словарь категорий. Ключ - id, Значение - объект
-    dataJson["categories"].forEach((e) {
-      Category c = Category.fromJson(e);
-      categoriesMap[c.id] = c;
-    });
-
-    Map<int, Farmer> farmersMap = Map(); // Словарь производителей. Ключ - id, Значение - производитель
-    dataJson["farmers"].forEach((e) {
-      Farmer f = Farmer.fromJson(e);
-      farmersMap[f.id] = f;
-    });
     List<Product> products = List();
-    for (var productJson in dataJson["products"]) {
-      Product product = Product.fromJson(productJson);
-      product.category = categoriesMap[productJson["categoryId"]]; // подствялем нужную категори
-      product.farmer = farmersMap[productJson["farmerId"]]; // подставляем нужного производителя
-      // если стоит фильтрация по категориям, то пропускаем этот товар
-      if (category != null && product.category != category) continue;
-      products.add(product);
+    if (allProductsCache == null) {
+      Map<String, dynamic> dataJson = await _getDataJson();
+
+      Map<int, Category> categoriesMap = Map(); // Словарь категорий. Ключ - id, Значение - объект
+      dataJson["categories"].forEach((e) {
+        Category c = Category.fromJson(e);
+        categoriesMap[c.id] = c;
+      });
+
+      Map<int, Farmer> farmersMap = Map(); // Словарь производителей. Ключ - id, Значение - производитель
+      dataJson["farmers"].forEach((e) {
+        Farmer f = Farmer.fromJson(e);
+        farmersMap[f.id] = f;
+      });
+      for (var productJson in dataJson["products"]) {
+        Product product = Product.fromJson(productJson);
+        product.category = categoriesMap[productJson["categoryId"]]; // подствялем нужную категори
+        product.farmer = farmersMap[productJson["farmerId"]]; // подставляем нужного производителя
+        products.add(product);
+      }
+      await _simulateNetworkDelay();
+      allProductsCache = List.from(products);
+    } else {
+      products = List.from(allProductsCache);
     }
-
-
+    // Фильтруем товары
+    if (category != null) products.removeWhere((element) => element.category.id != category.id);
     // Сортировка
     switch (order) {
       case SortOrder.ratingDesc: // По рейтенгу, сперва высший
@@ -91,7 +94,6 @@ class ProductsApi {
         });
         break;
     }
-    await _simulateNetworkDelay();
     return products;
   }
 
