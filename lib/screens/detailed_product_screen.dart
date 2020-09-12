@@ -42,7 +42,7 @@ class DetailedProductScreen extends StatelessWidget {
                   ),
                 ),
               ),
-              actions: [Center(child: FavoriteBadge())],
+              actions: [Center(child: FavoriteBadge(product: product,))],
               flexibleSpace: FlexibleSpaceBar(
                   collapseMode: CollapseMode.pin,
                   centerTitle: true,
