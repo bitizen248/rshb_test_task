@@ -6,6 +6,8 @@ import 'package:divan_test_task_rshb/screens/widgets/product_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+
+/// Вкладка списка товарос
 class ProductsTab extends StatefulWidget {
   @override
   _ProductsTabState createState() => _ProductsTabState();

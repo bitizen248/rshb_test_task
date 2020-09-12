@@ -16,6 +16,7 @@ class RshbApp extends StatelessWidget {
         title: 'РСХБ Тествое задание',
         theme: ThemeData(
           primaryColor: RshbColors.primary,
+          accentColor: RshbColors.primary,
           appBarTheme: AppBarTheme(
               color: Colors.white,
               brightness: Brightness.light,

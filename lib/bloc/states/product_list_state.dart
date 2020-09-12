@@ -2,12 +2,19 @@ import 'package:divan_test_task_rshb/models/category.dart';
 import 'package:divan_test_task_rshb/models/product.dart';
 import 'package:divan_test_task_rshb/models/sort_order.dart';
 
+/// Состояние для списка товаров
 class ProductListState {
+
+  /// Список категорий
   List<Category> categories;
+
+  /// Выбранная категория
   Category selectedCategory;
 
+  /// Типи и порядок сортировки
   SortOrder sortOrder;
 
+  /// Список товаров
   List<Product> products;
 
   ProductListState({this.categories, this.selectedCategory, this.sortOrder = SortOrder.ratingDesc, this.products});

@@ -99,6 +99,7 @@ class ProductsApi {
     return products;
   }
 
+  /// Получения списков избранного из памяти
   Future<Set<int>> _getFavorites() async {
     SharedPreferences preferences = await _preferences.future;
     if (!preferences.containsKey("favorites")) return Set();

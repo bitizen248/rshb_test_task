@@ -8,6 +8,8 @@ import 'package:divan_test_task_rshb/screens/widgets/rating_badge.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
+
+/// Детальная страница товара
 class DetailedProductScreen extends StatelessWidget {
   final Product product;
 
