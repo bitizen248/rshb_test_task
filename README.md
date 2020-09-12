@@ -1,16 +1,14 @@
-# divan_test_task_rshb
+# Тестовое задание для РСХБ от Дмитриева Ивана
 
-A new Flutter application.
+Декомпозиция задач - [доска в трелло](https://trello.com/b/X6WQtQOu/дмитриев-иван-тествое-задание)
 
-## Getting Started
+На задание ушло 14 часов
 
-This project is a starting point for a Flutter application.
+## Запуск
 
-A few resources to get you started if this is your first Flutter project:
+Приложенеи разрабатывалось и тестировалось на Flutter версии  1.20.3
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+Для запуска приложения нужно открыть его в Android Studio или в VS Code.
+В IDE должен быть установлен плагин для работы с Flutter. Так же нужно скачаь Flutter SDK.
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+Точка входа приложения `lib/main.dart`
